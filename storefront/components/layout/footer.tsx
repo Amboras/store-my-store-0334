@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { clearConsent } from '@/lib/cookie-consent'
 
 const footerLinks = {
   shop: [
@@ -83,6 +86,15 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Store. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
+            <button
+              onClick={() => {
+                clearConsent()
+                window.dispatchEvent(new Event('manage-cookies'))
+              }}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Manage Cookies
+            </button>
             <span className="text-xs text-muted-foreground">Powered by Medusa</span>
           </div>
         </div>

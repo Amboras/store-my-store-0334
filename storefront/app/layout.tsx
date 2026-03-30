@@ -5,6 +5,8 @@ import { Providers } from './providers'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import AnnouncementBar from '@/components/layout/announcement-bar'
+import { AnalyticsProvider } from '@/components/analytics-provider'
+import CookieConsent from '@/components/cookie-consent'
 import { Toaster } from 'sonner'
 
 const heading = Cormorant_Garamond({
@@ -41,9 +43,12 @@ export default function RootLayout({
           <AnnouncementBar />
           <Header />
           <main className="min-h-screen">
-            {children}
+            <AnalyticsProvider>
+              {children}
+            </AnalyticsProvider>
           </main>
           <Footer />
+          <CookieConsent />
           <Toaster position="bottom-right" richColors />
         </Providers>
       </body>
