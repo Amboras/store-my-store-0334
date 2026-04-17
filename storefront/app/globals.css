@@ -4,18 +4,25 @@
 
 @layer base {
   :root {
-    --background: 40 20% 98%;
-    --foreground: 0 0% 10%;
-    --muted: 40 10% 94%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 35 40% 50%;
+    --background: 0 0% 99%;
+    --foreground: 0 0% 5%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 348 90% 55%;
     --accent-foreground: 0 0% 100%;
-    --border: 40 10% 88%;
-    --ring: 35 40% 50%;
-    --primary: 0 0% 10%;
+    --border: 0 0% 88%;
+    --ring: 348 90% 55%;
+    --primary: 0 0% 5%;
     --primary-foreground: 0 0% 98%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
+
+    /* Vibrant palette */
+    --vivid-pink: #FF2D6B;
+    --vivid-yellow: #FFD000;
+    --vivid-cyan: #00D4FF;
+    --vivid-purple: #7C3AED;
+    --vivid-orange: #FF6B2B;
 
     /* Brand colors (dynamically injected from Store.metadata.brand) */
     /* Access in CSS: var(--brand-primary), var(--brand-secondary) */
@@ -105,6 +112,89 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Vibrant gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--vivid-pink) 0%, var(--vivid-purple) 50%, var(--vivid-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-warm {
+  background: linear-gradient(135deg, var(--vivid-yellow) 0%, var(--vivid-orange) 50%, var(--vivid-pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Vibrant button */
+.btn-vivid {
+  background: linear-gradient(135deg, var(--vivid-pink), var(--vivid-purple));
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.btn-vivid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--vivid-purple), var(--vivid-cyan));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-vivid:hover::before {
+  opacity: 1;
+}
+.btn-vivid span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Marquee scroll */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 18s linear infinite;
+}
+
+/* Skew animation */
+@keyframes skew-in {
+  0% { opacity: 0; transform: skewX(-10deg) translateX(-40px); }
+  100% { opacity: 1; transform: skewX(0deg) translateX(0); }
+}
+.animate-skew-in {
+  animation: skew-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Float */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(3deg); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Spin slow */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+
+/* Ping pop */
+@keyframes ping-pop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.animate-ping-pop {
+  animation: ping-pop 2s ease-in-out infinite;
 }
 
 /* Selection color */
