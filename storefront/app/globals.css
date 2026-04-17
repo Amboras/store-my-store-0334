@@ -114,24 +114,87 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Vibrant gradient text */
+/* ── Neon palette ── */
+:root {
+  --neon-green:  #00FF87;
+  --neon-blue:   #00D4FF;
+  --neon-pink:   #FF2D6B;
+  --neon-purple: #BF5FFF;
+  --neon-gold:   #FFD700;
+}
+
+/* Neon gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, var(--vivid-pink) 0%, var(--vivid-purple) 50%, var(--vivid-cyan) 100%);
+  background: linear-gradient(135deg, var(--neon-green) 0%, var(--neon-blue) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-warm {
-  background: linear-gradient(135deg, var(--vivid-yellow) 0%, var(--vivid-orange) 50%, var(--vivid-pink) 100%);
+  background: linear-gradient(135deg, var(--neon-gold) 0%, var(--neon-pink) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Vibrant button */
+.gradient-text-purple {
+  background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Neon glow button */
+.btn-neon {
+  background: transparent;
+  color: var(--neon-green);
+  border: 1.5px solid var(--neon-green);
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 12px rgba(0,255,135,0.25), inset 0 0 12px rgba(0,255,135,0.05);
+}
+.btn-neon:hover {
+  color: #000;
+  box-shadow: 0 0 28px rgba(0,255,135,0.7), inset 0 0 0 100px var(--neon-green);
+}
+.btn-neon span { position: relative; z-index: 1; }
+
+/* Solid dark button */
+.btn-dark {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.85);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.btn-dark:hover {
+  background: rgba(255,255,255,0.13);
+  border-color: rgba(255,255,255,0.25);
+}
+
+/* Neon line / divider */
+.neon-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+}
+
+/* Glowing card */
+.card-glow {
+  border: 1px solid rgba(0,255,135,0.15);
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.card-glow:hover {
+  border-color: rgba(0,255,135,0.4);
+  box-shadow: 0 0 30px rgba(0,255,135,0.1);
+}
+
+/* Vivid legacy (kept for other pages) */
 .btn-vivid {
-  background: linear-gradient(135deg, var(--vivid-pink), var(--vivid-purple));
+  background: linear-gradient(135deg, var(--vivid-pink, #FF2D6B), var(--vivid-purple, #7C3AED));
   color: white;
   position: relative;
   overflow: hidden;
@@ -140,17 +203,12 @@ html {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--vivid-purple), var(--vivid-cyan));
+  background: linear-gradient(135deg, #7C3AED, #00D4FF);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-.btn-vivid:hover::before {
-  opacity: 1;
-}
-.btn-vivid span {
-  position: relative;
-  z-index: 1;
-}
+.btn-vivid:hover::before { opacity: 1; }
+.btn-vivid span { position: relative; z-index: 1; }
 
 /* Marquee scroll */
 @keyframes marquee {
@@ -195,6 +253,46 @@ html {
 }
 .animate-ping-pop {
   animation: ping-pop 2s ease-in-out infinite;
+}
+
+/* Neon pulse glow */
+@keyframes neon-pulse {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 6px var(--neon-green)); }
+  50% { opacity: 0.7; filter: drop-shadow(0 0 18px var(--neon-green)); }
+}
+.animate-neon-pulse {
+  animation: neon-pulse 2.5s ease-in-out infinite;
+}
+
+/* Flicker */
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.6; }
+  97% { opacity: 1; }
+  98% { opacity: 0.4; }
+  99% { opacity: 0.9; }
+}
+.animate-flicker {
+  animation: flicker 6s ease-in-out infinite;
+}
+
+/* Scan line slide */
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+.animate-scan {
+  animation: scan 6s linear infinite;
+}
+
+/* Slow drift */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -15px) scale(1.05); }
+  66% { transform: translate(-15px, 10px) scale(0.97); }
+}
+.animate-drift {
+  animation: drift 12s ease-in-out infinite;
 }
 
 /* Selection color */
