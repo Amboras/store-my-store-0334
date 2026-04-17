@@ -249,13 +249,13 @@ export default function HomePage() {
         <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: Truck, title: 'Free Shipping', desc: 'On orders over $75', color: 'var(--vivid-pink)' },
-              { icon: RotateCcw, title: 'Easy Returns', desc: '30-day return policy', color: 'var(--vivid-purple)' },
-              { icon: Shield, title: 'Secure Checkout', desc: '256-bit SSL encryption', color: 'var(--vivid-orange)' },
-            ].map(({ icon: Icon, title, desc, color }) => (
+              { icon: Truck, title: 'Free Shipping', desc: 'On orders over $75' },
+              { icon: RotateCcw, title: 'Easy Returns', desc: '30-day return policy' },
+              { icon: Shield, title: 'Secure Checkout', desc: '256-bit SSL encryption' },
+            ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="flex items-center gap-4 justify-center md:justify-start group">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-black/10 group-hover:scale-110 transition-transform">
-                  <Icon className="h-5 w-5" style={{ color }} strokeWidth={2.5} />
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-black/15 group-hover:scale-110 transition-transform">
+                  <Icon className="h-5 w-5 text-black" strokeWidth={2.5} />
                 </div>
                 <div>
                   <p className="text-sm font-black text-black uppercase tracking-wide">{title}</p>
