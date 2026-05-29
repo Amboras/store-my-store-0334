@@ -3,39 +3,70 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
-import {
-  ArrowRight, ArrowUpRight, Zap, Star, Shield,
-  Truck, RotateCcw, ChevronRight, Sparkles
-} from 'lucide-react'
-import CollectionSection from '@/components/marketing/collection-section'
-import { useCollections } from '@/hooks/use-collections'
+import { ArrowRight, ArrowUpRight, Star, Quote } from 'lucide-react'
 import { trackMetaEvent } from '@/lib/meta-pixel'
-import { HERO_PLACEHOLDER, LIFESTYLE_PLACEHOLDER } from '@/lib/utils/placeholder-images'
 
-const MARQUEE_ITEMS = [
-  'NEW SEASON', '///', 'PREMIUM DROPS', '///', 'FREE SHIPPING $75+', '///',
-  'LIMITED EDITION', '///', 'NEW SEASON', '///', 'PREMIUM DROPS', '///',
-  'FREE SHIPPING $75+', '///', 'LIMITED EDITION', '///',
+/* ──────────────────────────────────────────────
+   Tuck — clean, minimal, front-pocket aesthetic
+   Palette: off-white #f5f1ec · black #0f0f0f · coral accent #e85d3c
+─────────────────────────────────────────────── */
+
+const HERO_IMAGE =
+  'https://ahjviugsxpwzpkyzgrhi.supabase.co/storage/v1/object/public/product-user-files/6c3fc4dc-b4bc-4d62-ba8d-479a5216ef3b%2Fai-lifestyle-1780082670068-0-01KSTK3YQVRXK58MHFWK8G26WC.webp'
+
+const FEATURED_IMAGE =
+  'https://ahjviugsxpwzpkyzgrhi.supabase.co/storage/v1/object/public/product-user-files/6c3fc4dc-b4bc-4d62-ba8d-479a5216ef3b%2Fai-product-1780082713723-0-01KSTK59984CN4NGARQ8N5B2T5.webp'
+
+const WALLET_IMAGE =
+  'https://ahjviugsxpwzpkyzgrhi.supabase.co/storage/v1/object/public/product-user-files/6c3fc4dc-b4bc-4d62-ba8d-479a5216ef3b%2Fai-product-1780082883778-0-01KSTKAF9N74KA3GAE05HV4VGR.webp'
+
+const CARD_HOLDER_IMAGE =
+  'https://ahjviugsxpwzpkyzgrhi.supabase.co/storage/v1/object/public/product-user-files/6c3fc4dc-b4bc-4d62-ba8d-479a5216ef3b%2Fai-product-1780082715201-0-01KSTK5ANKNCW7MXE2W2HEYNXC.webp'
+
+const CLIP_IMAGE =
+  'https://ahjviugsxpwzpkyzgrhi.supabase.co/storage/v1/object/public/product-user-files/6c3fc4dc-b4bc-4d62-ba8d-479a5216ef3b%2Fai-product-1780082721113-0-01KSTK5GGAK4G7YDZQS4M7JFQZ.webp'
+
+const POCKET_IMAGE =
+  'https://ahjviugsxpwzpkyzgrhi.supabase.co/storage/v1/object/public/product-user-files/6c3fc4dc-b4bc-4d62-ba8d-479a5216ef3b%2Fai-lifestyle-1780083034403-0-01KSTKF2D1BTMH34T1MERNR366.webp'
+
+const TRUST_BAR = [
+  'Slim enough for your front pocket',
+  'Free shipping',
+  '30-day returns',
+  'Built to last',
 ]
 
-const FEATURES = [
-  { icon: Truck,     title: 'Free Shipping',    desc: 'On orders over $75' },
-  { icon: RotateCcw, title: 'Easy Returns',     desc: '30-day return policy' },
-  { icon: Shield,    title: 'Secure Checkout',  desc: '256-bit SSL encryption' },
-  { icon: Zap,       title: 'Fast Dispatch',    desc: 'Ships within 24 hours' },
+const COLLECTION_ITEMS = [
+  { name: 'The Tuck Wallet', price: '$55', image: WALLET_IMAGE, href: '/the-tuck-wallet' },
+  { name: 'The Tuck Card Holder', price: '$38', image: CARD_HOLDER_IMAGE, href: '/products' },
+  { name: 'The Tuck Clip', price: '$42', image: CLIP_IMAGE, href: '/products' },
 ]
 
-const STATS = [
-  { value: '50K+',  label: 'Customers Worldwide' },
-  { value: '200+',  label: 'Premium Products' },
-  { value: '4.9',   label: 'Average Rating' },
-  { value: '99%',   label: 'Satisfaction Rate' },
+const REVIEWS = [
+  {
+    quote:
+      'I forget it\u2019s there. Front pocket, all day, every day — finally a wallet that doesn\u2019t fight me.',
+    name: 'Marcus T.',
+    detail: 'Tuck Wallet · Matte Black',
+  },
+  {
+    quote:
+      'Carries exactly what I need and nothing I don\u2019t. The design is so clean it almost disappears.',
+    name: 'Priya S.',
+    detail: 'Tuck Card Holder · Sage Green',
+  },
+  {
+    quote:
+      'Went from a bulky bifold to Tuck and never looked back. Minimalism done right.',
+    name: 'Daniel R.',
+    detail: 'Tuck Wallet · Chalk White',
+  },
 ]
 
 export default function HomePage() {
-  const { data: collections, isLoading } = useCollections()
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
+  const [reviewIdx, setReviewIdx] = useState(0)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -46,434 +77,396 @@ export default function HomePage() {
   }
 
   return (
-    <div className="bg-[#050505] text-white">
+    <div className="bg-[#f5f1ec] text-[#0f0f0f]">
 
-      {/* ═══════════════════════════════════════════
-          HERO — full viewport, dark with neon glow
-      ═══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col overflow-hidden">
+      {/* ═══════════════════ HERO ═══════════════════ */}
+      <section className="relative">
+        <div className="container-custom pt-12 pb-20 lg:pt-20 lg:pb-32">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
 
-        {/* Background — deep black with radial neon bleed */}
-        <div className="absolute inset-0 bg-[#050505]">
-          {/* Top-left neon green orb */}
-          <div
-            className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full animate-drift"
-            style={{ background: 'radial-gradient(circle, rgba(0,255,135,0.12) 0%, transparent 70%)' }}
-          />
-          {/* Bottom-right neon blue orb */}
-          <div
-            className="absolute -bottom-32 -right-32 w-[600px] h-[600px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.10) 0%, transparent 70%)' }}
-          />
-          {/* Center purple hint */}
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[400px] rounded-full opacity-30"
-            style={{ background: 'radial-gradient(ellipse, rgba(191,95,255,0.07) 0%, transparent 70%)' }}
-          />
-
-          {/* Subtle grid overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.025]"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)',
-              backgroundSize: '60px 60px',
-            }}
-          />
-
-          {/* Scan line */}
-          <div
-            className="absolute left-0 right-0 h-px animate-scan pointer-events-none"
-            style={{ background: 'linear-gradient(90deg, transparent, rgba(0,255,135,0.15), transparent)' }}
-          />
-        </div>
-
-        {/* ── Top nav label ── */}
-        <div className="relative z-10 border-b border-white/5">
-          <div className="container-custom flex items-center justify-between py-4 text-[11px] uppercase tracking-[0.2em] text-white/30 font-mono">
-            <span>EST. 2019 — PREMIUM COLLECTIONS</span>
-            <span className="hidden sm:block">SS / 2025</span>
-            <span className="animate-neon-pulse" style={{ color: 'var(--neon-green)' }}>● LIVE</span>
-          </div>
-        </div>
-
-        {/* ── Main hero content ── */}
-        <div className="relative z-10 flex-1 flex items-center">
-          <div className="container-custom w-full py-20 lg:py-0">
-            <div className="grid lg:grid-cols-12 gap-12 items-center min-h-[75vh]">
-
-              {/* LEFT — Text col (7 cols) */}
-              <div className="lg:col-span-7 space-y-10 animate-fade-in-up">
-
-                {/* Eyebrow */}
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-8 h-px"
-                    style={{ background: 'var(--neon-green)' }}
-                  />
-                  <span
-                    className="text-xs font-mono uppercase tracking-[0.25em] animate-flicker"
-                    style={{ color: 'var(--neon-green)' }}
-                  >
-                    New Season Drop
-                  </span>
-                </div>
-
-                {/* Headline */}
-                <div>
-                  <h1
-                    className="font-heading font-black leading-[0.9] text-white"
-                    style={{ fontSize: 'clamp(4rem, 9vw, 8.5rem)', letterSpacing: '-0.04em' }}
-                  >
-                    CRAFTED<br />
-                    FOR THE<br />
-                    <span className="gradient-text">BOLD.</span>
-                  </h1>
-                </div>
-
-                {/* Sub */}
-                <p className="text-white/40 text-lg leading-relaxed max-w-lg font-light">
-                  Premium collections that don&apos;t compromise. Built for those
-                  who demand more — from the materials, the craft, the detail.
-                </p>
-
-                {/* CTAs */}
-                <div className="flex flex-wrap gap-4 pt-2">
-                  <Link
-                    href="/products"
-                    prefetch
-                    className="btn-neon inline-flex items-center gap-3 px-9 py-4 text-sm font-bold uppercase tracking-widest rounded-none"
-                  >
-                    <span className="flex items-center gap-3">
-                      Shop Now
-                      <ArrowUpRight className="h-4 w-4" />
-                    </span>
-                  </Link>
-                  <Link
-                    href="/collections"
-                    prefetch
-                    className="btn-dark inline-flex items-center gap-3 px-9 py-4 text-sm font-bold uppercase tracking-widest rounded-none"
-                  >
-                    View Collections
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
-                </div>
-
-                {/* Stats row */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t border-white/[0.06]">
-                  {STATS.map(({ value, label }) => (
-                    <div key={label}>
-                      <p
-                        className="text-2xl font-black font-mono"
-                        style={{ color: 'var(--neon-green)' }}
-                      >
-                        {value}
-                      </p>
-                      <p className="text-[11px] text-white/30 uppercase tracking-widest mt-1">{label}</p>
-                    </div>
-                  ))}
-                </div>
+            {/* Copy */}
+            <div className="lg:col-span-6 space-y-8 animate-fade-in-up">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-px bg-[#e85d3c]" />
+                <span className="text-[11px] uppercase tracking-[0.3em] text-[#0f0f0f]/60">
+                  Tuck · Est. for the front pocket
+                </span>
               </div>
 
-              {/* RIGHT — Image col (4 cols, offset 1) */}
-              <div className="lg:col-span-4 lg:col-start-9 relative animate-fade-in">
+              <h1
+                className="font-heading font-bold leading-[0.95] text-balance"
+                style={{ fontSize: 'clamp(3.25rem, 8vw, 7rem)', letterSpacing: '-0.035em' }}
+              >
+                Carry light.<br />
+                Live <span className="italic font-light">lighter.</span>
+              </h1>
 
-                {/* Neon border frame */}
-                <div
-                  className="absolute -inset-2 rounded-none opacity-60"
-                  style={{ background: 'linear-gradient(135deg, var(--neon-green), transparent 60%, var(--neon-blue))' }}
-                />
-                <div className="absolute -inset-[3px] bg-[#050505] rounded-none" />
+              <p className="text-lg lg:text-xl text-[#0f0f0f]/60 max-w-md leading-relaxed">
+                Slim wallets built for the front pocket generation.
+              </p>
 
-                {/* Image */}
-                <div className="relative aspect-[2/3] overflow-hidden">
-                  <Image
-                    src={HERO_PLACEHOLDER}
-                    alt="Hero"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 35vw"
-                    className="object-cover grayscale contrast-125 brightness-75"
-                  />
-                  {/* Neon overlay tint */}
-                  <div
-                    className="absolute inset-0"
-                    style={{ background: 'linear-gradient(180deg, transparent 40%, rgba(0,255,135,0.08) 100%)' }}
-                  />
-                  {/* Bottom label */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10">
-                    <p className="text-[10px] font-mono uppercase tracking-[0.25em] mb-1" style={{ color: 'var(--neon-green)' }}>
-                      Featured
-                    </p>
-                    <p className="text-white font-black text-xl tracking-tight">SS 2025 Collection</p>
-                  </div>
-                </div>
-
-                {/* Floating rating badge */}
-                <div
-                  className="absolute -left-6 top-1/3 -translate-y-1/2 px-4 py-3 border border-white/10 bg-black/80 backdrop-blur-md"
+              <div className="pt-4">
+                <Link
+                  href="/the-tuck-wallet"
+                  className="group inline-flex items-center gap-3 bg-[#0f0f0f] text-[#f5f1ec] px-9 py-4 text-sm font-medium uppercase tracking-[0.2em] hover:bg-[#e85d3c] transition-colors duration-300"
                 >
-                  <div className="flex items-center gap-1.5 mb-1">
-                    {[1,2,3,4,5].map(i => (
-                      <Star key={i} className="h-3 w-3 fill-current" style={{ color: 'var(--neon-gold)' }} />
-                    ))}
-                  </div>
-                  <p className="text-white text-xs font-bold">4.9 / 5.0</p>
-                  <p className="text-white/30 text-[10px] font-mono">50K+ reviews</p>
-                </div>
+                  Shop now
+                  <ArrowUpRight className="h-4 w-4 group-hover:rotate-45 transition-transform duration-300" />
+                </Link>
               </div>
-
             </div>
-          </div>
-        </div>
-
-        {/* Scroll hint */}
-        <div className="relative z-10 container-custom pb-8 flex items-center gap-3 text-white/20 text-[11px] font-mono uppercase tracking-widest">
-          <div className="w-4 h-4 border border-white/20 rounded-full flex items-center justify-center animate-bounce">
-            <div className="w-1 h-1 rounded-full bg-white/40" />
-          </div>
-          Scroll to explore
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════
-          MARQUEE STRIP
-      ═══════════════════════════════════════════ */}
-      <div className="relative overflow-hidden border-y border-white/[0.06] py-3 bg-[#080808]">
-        <div className="flex animate-marquee whitespace-nowrap">
-          {MARQUEE_ITEMS.map((item, i) => (
-            <span
-              key={i}
-              className={`inline-flex items-center gap-6 px-6 text-xs font-mono uppercase tracking-[0.2em] ${
-                item === '///' ? 'opacity-20 text-white' : ''
-              }`}
-              style={item !== '///' ? { color: 'var(--neon-green)' } : {}}
-            >
-              {item}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ═══════════════════════════════════════════
-          COLLECTIONS
-      ═══════════════════════════════════════════ */}
-      {isLoading ? (
-        <section className="py-24 bg-[#050505]">
-          <div className="container-custom">
-            <div className="space-y-3 mb-12">
-              <div className="h-2 w-16 rounded-full animate-pulse" style={{ background: 'var(--neon-green)', opacity: 0.3 }} />
-              <div className="h-8 w-48 bg-white/5 rounded animate-pulse" />
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="aspect-[3/4] bg-white/[0.03] animate-pulse rounded-none" />
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : collections && collections.length > 0 ? (
-        <div className="bg-[#050505]">
-          {collections.map((col: { id: string; handle: string; title: string; metadata?: Record<string, unknown> }, idx: number) => (
-            <CollectionSection key={col.id} collection={col} alternate={idx % 2 === 1} />
-          ))}
-        </div>
-      ) : null}
-
-      {/* ═══════════════════════════════════════════
-          BRAND STORY — split section
-      ═══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-[#070707] py-28 border-t border-white/[0.04]">
-        {/* neon green glow far left */}
-        <div
-          className="absolute top-0 left-0 w-[400px] h-[400px] pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(0,255,135,0.06) 0%, transparent 70%)' }}
-        />
-
-        <div className="container-custom relative z-10">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
 
             {/* Image */}
-            <div className="relative order-2 lg:order-1">
-              {/* Accent line left */}
-              <div
-                className="absolute -left-4 top-0 bottom-0 w-[2px]"
-                style={{ background: 'linear-gradient(180deg, var(--neon-green), transparent)' }}
-              />
-
-              <div className="aspect-[4/5] overflow-hidden relative grayscale contrast-110 brightness-[0.65]">
+            <div className="lg:col-span-6 relative animate-fade-in">
+              <div className="relative aspect-[4/5] overflow-hidden bg-[#ece6dd]">
                 <Image
-                  src={LIFESTYLE_PLACEHOLDER}
-                  alt="Our Story"
+                  src={HERO_IMAGE}
+                  alt="A slim Tuck wallet held in hand"
                   fill
+                  priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />
               </div>
-
-              {/* Bottom card */}
-              <div className="absolute -bottom-6 -right-6 bg-[#0a0a0a] border border-white/[0.08] p-6 shadow-2xl">
-                <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/30 mb-1">Founded</p>
-                <p className="text-4xl font-black text-white">2019</p>
-                <p className="text-[11px] text-white/30 mt-1 font-mono">Premium since day one</p>
+              {/* Floating tag */}
+              <div className="absolute -bottom-5 -left-5 lg:-left-8 bg-[#f5f1ec] border border-[#0f0f0f]/10 px-5 py-3 shadow-sm">
+                <p className="text-[10px] uppercase tracking-[0.25em] text-[#0f0f0f]/50">Now Shipping</p>
+                <p className="text-sm font-medium mt-0.5">The Tuck Wallet</p>
               </div>
-            </div>
-
-            {/* Text */}
-            <div className="space-y-8 order-1 lg:order-2">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-px" style={{ background: 'var(--neon-green)' }} />
-                <span className="text-xs font-mono uppercase tracking-[0.25em]" style={{ color: 'var(--neon-green)' }}>
-                  Our Philosophy
-                </span>
-              </div>
-
-              <h2
-                className="font-heading font-black leading-none text-white"
-                style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '-0.04em' }}
-              >
-                BUILT TO<br />
-                <span className="gradient-text">OUTLAST.</span>
-              </h2>
-
-              <p className="text-white/35 text-lg leading-relaxed max-w-md font-light">
-                We obsess over every thread, every seam, every detail so you don&apos;t have to.
-                Premium isn&apos;t a price point — it&apos;s a standard.
-              </p>
-
-              {/* Values list */}
-              <div className="space-y-4 py-6 border-y border-white/[0.06]">
-                {[
-                  'Sustainably sourced materials',
-                  'Artisan-level craftsmanship',
-                  'Timeless silhouettes, modern edge',
-                  'Zero compromise on quality',
-                ].map(item => (
-                  <div key={item} className="flex items-center gap-4">
-                    <div
-                      className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                      style={{ background: 'var(--neon-green)', boxShadow: '0 0 6px var(--neon-green)' }}
-                    />
-                    <span className="text-white/50 text-sm">{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <Link
-                href="/about"
-                prefetch
-                className="inline-flex items-center gap-3 text-sm font-bold uppercase tracking-widest group"
-                style={{ color: 'var(--neon-green)' }}
-              >
-                Read Our Story
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          FEATURES BAR
-      ═══════════════════════════════════════════ */}
-      <section className="border-t border-b border-white/[0.05] bg-[#060606] py-0">
+      {/* ═══════════════════ TRUST BAR ═══════════════════ */}
+      <section className="border-y border-[#0f0f0f]/10 bg-[#f5f1ec]">
         <div className="container-custom">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 lg:divide-x divide-white/[0.05]">
-            {FEATURES.map(({ icon: Icon, title, desc }) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[#0f0f0f]/10">
+            {TRUST_BAR.map((item) => (
               <div
-                key={title}
-                className="flex items-center gap-5 px-6 py-8 group hover:bg-white/[0.02] transition-colors"
+                key={item}
+                className="px-4 py-6 lg:py-8 text-center text-xs md:text-sm uppercase tracking-[0.15em] text-[#0f0f0f]/70"
               >
-                <div
-                  className="w-10 h-10 rounded-none flex items-center justify-center flex-shrink-0 border border-white/[0.08] group-hover:border-[rgba(0,255,135,0.3)] transition-colors"
-                >
-                  <Icon className="h-4 w-4 text-white/30 group-hover:text-[#00FF87] transition-colors" strokeWidth={1.5} />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-white/70 group-hover:text-white transition-colors">{title}</p>
-                  <p className="text-xs text-white/25 mt-0.5">{desc}</p>
-                </div>
+                {item}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          NEWSLETTER
-      ═══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden py-32 bg-[#050505]">
-        {/* Neon green glow center */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(0,255,135,0.05) 0%, transparent 70%)' }}
-        />
+      {/* ═══════════════════ FEATURED PRODUCT ═══════════════════ */}
+      <section className="py-24 lg:py-36">
+        <div className="container-custom">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-        {/* Background text */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-          <p
-            className="font-black text-white/[0.015] whitespace-nowrap"
-            style={{ fontSize: 'clamp(8rem, 22vw, 20rem)', letterSpacing: '-0.05em', lineHeight: 1 }}
-          >
-            STAY IN
-          </p>
+            {/* Image */}
+            <div className="relative">
+              <div className="relative aspect-square overflow-hidden bg-[#ece6dd]">
+                <Image
+                  src={FEATURED_IMAGE}
+                  alt="The Tuck Wallet in matte black"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+
+            {/* Copy */}
+            <div className="space-y-8 lg:pl-8">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-px bg-[#e85d3c]" />
+                <span className="text-[11px] uppercase tracking-[0.3em] text-[#e85d3c] font-medium">
+                  The Flagship
+                </span>
+              </div>
+
+              <h2
+                className="font-heading font-bold leading-[1]"
+                style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '-0.03em' }}
+              >
+                The Tuck Wallet.
+              </h2>
+
+              <p className="text-base lg:text-lg text-[#0f0f0f]/60 leading-relaxed max-w-md">
+                A slim bifold built for front pocket carry. Fits four cards and folded cash —
+                nothing more, nothing less.
+              </p>
+
+              <div className="flex items-baseline gap-4">
+                <p className="text-3xl font-heading font-semibold">$55</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-[#0f0f0f]/50">USD</p>
+              </div>
+
+              {/* Color options */}
+              <div className="space-y-3">
+                <p className="text-[11px] uppercase tracking-[0.25em] text-[#0f0f0f]/50">
+                  Three colorways
+                </p>
+                <div className="flex items-center gap-3">
+                  {[
+                    { name: 'Chalk White', hex: '#ece6dd' },
+                    { name: 'Matte Black', hex: '#1a1a1a' },
+                    { name: 'Sage Green', hex: '#8a9a82' },
+                  ].map((c) => (
+                    <div key={c.name} className="flex items-center gap-2 group cursor-pointer">
+                      <span
+                        className="w-7 h-7 rounded-full border border-[#0f0f0f]/15 ring-offset-2 ring-offset-[#f5f1ec] group-hover:ring-2 group-hover:ring-[#0f0f0f]/40 transition-all"
+                        style={{ backgroundColor: c.hex }}
+                        aria-label={c.name}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <Link
+                  href="/the-tuck-wallet"
+                  className="group inline-flex items-center gap-3 bg-[#0f0f0f] text-[#f5f1ec] px-9 py-4 text-sm font-medium uppercase tracking-[0.2em] hover:bg-[#e85d3c] transition-colors duration-300"
+                >
+                  Shop now
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
+              </div>
+            </div>
+
+          </div>
         </div>
+      </section>
 
-        <div className="container-custom relative z-10 max-w-2xl mx-auto text-center">
-
-          {/* Icon */}
-          <div
-            className="inline-flex items-center justify-center w-16 h-16 mb-8 border animate-neon-pulse"
-            style={{ borderColor: 'rgba(0,255,135,0.3)', background: 'rgba(0,255,135,0.04)' }}
-          >
-            <Sparkles className="h-6 w-6" style={{ color: 'var(--neon-green)' }} />
+      {/* ═══════════════════ COLLECTION ROW ═══════════════════ */}
+      <section className="py-24 lg:py-32 bg-[#ece6dd]/40 border-y border-[#0f0f0f]/10">
+        <div className="container-custom">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-px bg-[#e85d3c]" />
+                <span className="text-[11px] uppercase tracking-[0.3em] text-[#0f0f0f]/60">
+                  The Collection
+                </span>
+              </div>
+              <h2
+                className="font-heading font-bold leading-none"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.03em' }}
+              >
+                Everything you need.<br />
+                <span className="italic font-light text-[#0f0f0f]/70">Nothing you don\u2019t.</span>
+              </h2>
+            </div>
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] border-b border-[#0f0f0f] pb-1 hover:text-[#e85d3c] hover:border-[#e85d3c] transition-colors"
+            >
+              View all
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
 
-          <h2
-            className="font-heading font-black leading-none mb-5 text-white"
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', letterSpacing: '-0.04em' }}
-          >
-            STAY AHEAD.<br />
-            <span className="gradient-text">STAY FIRST.</span>
-          </h2>
-          <p className="text-white/30 text-base mb-10 max-w-md mx-auto font-light leading-relaxed">
-            Get early access to drops, members-only pricing, and zero noise.
-            Unsubscribe any time — no hard feelings.
-          </p>
-
-          {subscribed ? (
-            <div
-              className="inline-flex items-center gap-3 px-8 py-5 border text-sm font-bold uppercase tracking-widest"
-              style={{ borderColor: 'rgba(0,255,135,0.4)', color: 'var(--neon-green)' }}
-            >
-              <Sparkles className="h-4 w-4" />
-              You&apos;re on the list. Watch your inbox.
-            </div>
-          ) : (
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col sm:flex-row gap-0 max-w-lg mx-auto border border-white/[0.08]"
-            >
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                className="flex-1 bg-transparent px-6 py-4 text-sm text-white placeholder:text-white/20 focus:outline-none border-r-0 border-white/[0.08] font-mono"
-              />
-              <button
-                type="submit"
-                className="px-8 py-4 text-xs font-bold uppercase tracking-widest border-l border-white/[0.08] text-black transition-all whitespace-nowrap"
-                style={{ background: 'var(--neon-green)' }}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {COLLECTION_ITEMS.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="group block"
               >
-                Join Now
-              </button>
-            </form>
-          )}
+                <div className="relative aspect-square overflow-hidden bg-[#f5f1ec] mb-5">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <h3 className="text-base font-medium tracking-tight group-hover:text-[#e85d3c] transition-colors">
+                    {item.name}
+                  </h3>
+                  <p className="text-sm text-[#0f0f0f]/60">{item.price}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <p className="text-white/15 text-xs mt-6 font-mono uppercase tracking-widest">
-            No spam. Ever.
-          </p>
+      {/* ═══════════════════ BRAND STATEMENT ═══════════════════ */}
+      <section className="py-32 lg:py-48 relative overflow-hidden">
+        <div className="container-custom relative">
+          <div className="max-w-4xl mx-auto text-center space-y-10">
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-8 h-px bg-[#e85d3c]" />
+              <span className="text-[11px] uppercase tracking-[0.3em] text-[#e85d3c] font-medium">
+                Why Tuck
+              </span>
+              <div className="w-8 h-px bg-[#e85d3c]" />
+            </div>
+
+            <p
+              className="font-heading font-light leading-[1.1] text-balance"
+              style={{ fontSize: 'clamp(2rem, 4.5vw, 4rem)', letterSpacing: '-0.025em' }}
+            >
+              Most wallets are <span className="line-through text-[#0f0f0f]/30">too much.</span><br />
+              Tuck is <span className="italic font-medium">just enough.</span>
+            </p>
+
+            <p className="text-base lg:text-lg text-[#0f0f0f]/60 max-w-xl mx-auto leading-relaxed">
+              Slim profile, clean design, everything you actually need.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ REVIEW CAROUSEL ═══════════════════ */}
+      <section className="py-24 lg:py-32 bg-[#0f0f0f] text-[#f5f1ec]">
+        <div className="container-custom">
+          <div className="max-w-3xl mx-auto text-center space-y-12">
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-center gap-3">
+                <div className="w-8 h-px bg-[#e85d3c]" />
+                <span className="text-[11px] uppercase tracking-[0.3em] text-[#f5f1ec]/60">
+                  Worn daily by thousands
+                </span>
+                <div className="w-8 h-px bg-[#e85d3c]" />
+              </div>
+            </div>
+
+            {/* Quote */}
+            <div className="relative min-h-[260px] flex items-center justify-center">
+              <Quote
+                className="absolute -top-4 left-1/2 -translate-x-1/2 h-10 w-10 text-[#e85d3c]/30"
+                strokeWidth={1}
+              />
+              {REVIEWS.map((r, i) => (
+                <div
+                  key={i}
+                  className={`absolute inset-0 flex flex-col items-center justify-center space-y-8 transition-opacity duration-500 ${
+                    i === reviewIdx ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
+                >
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} className="h-4 w-4 fill-[#e85d3c] text-[#e85d3c]" />
+                    ))}
+                  </div>
+
+                  <p
+                    className="font-heading font-light leading-snug text-balance px-4"
+                    style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', letterSpacing: '-0.02em' }}
+                  >
+                    &ldquo;{r.quote}&rdquo;
+                  </p>
+
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">{r.name}</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-[#f5f1ec]/40">
+                      {r.detail}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Dots */}
+            <div className="flex items-center justify-center gap-2 pt-6">
+              {REVIEWS.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setReviewIdx(i)}
+                  className={`h-1.5 transition-all duration-300 ${
+                    i === reviewIdx ? 'w-8 bg-[#e85d3c]' : 'w-1.5 bg-[#f5f1ec]/30'
+                  }`}
+                  aria-label={`Review ${i + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ EMAIL SIGNUP ═══════════════════ */}
+      <section className="py-24 lg:py-36 bg-[#f5f1ec]">
+        <div className="container-custom">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center max-w-5xl mx-auto">
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-px bg-[#e85d3c]" />
+                <span className="text-[11px] uppercase tracking-[0.3em] text-[#0f0f0f]/60">
+                  Newsletter
+                </span>
+              </div>
+
+              <h2
+                className="font-heading font-bold leading-[0.95]"
+                style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', letterSpacing: '-0.03em' }}
+              >
+                Less is <span className="italic font-light">more.</span>
+              </h2>
+              <p className="text-base lg:text-lg text-[#0f0f0f]/60 max-w-sm leading-relaxed">
+                New drops and early access. No noise.
+              </p>
+            </div>
+
+            <div>
+              {subscribed ? (
+                <div className="border-b-2 border-[#e85d3c] pb-5">
+                  <p className="text-sm uppercase tracking-[0.25em] text-[#e85d3c] font-medium">
+                    You\u2019re in. Welcome to Tuck.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="flex items-end gap-4 border-b-2 border-[#0f0f0f] pb-3 focus-within:border-[#e85d3c] transition-colors">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="your@email.com"
+                      className="flex-1 bg-transparent text-base lg:text-lg placeholder:text-[#0f0f0f]/30 focus:outline-none"
+                      required
+                    />
+                    <button
+                      type="submit"
+                      className="text-sm uppercase tracking-[0.2em] font-medium hover:text-[#e85d3c] transition-colors flex items-center gap-2 pb-1"
+                    >
+                      Subscribe
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <p className="text-xs text-[#0f0f0f]/40">
+                    Unsubscribe any time. No spam — that\u2019s the whole point.
+                  </p>
+                </form>
+              )}
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ POCKET STRIP ═══════════════════ */}
+      <section className="relative h-[55vh] min-h-[400px] overflow-hidden bg-[#0f0f0f]">
+        <Image
+          src={POCKET_IMAGE}
+          alt="A Tuck wallet in a front pocket"
+          fill
+          sizes="100vw"
+          className="object-cover opacity-90"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f]/40 to-transparent" />
+        <div className="absolute inset-0 flex items-end">
+          <div className="container-custom pb-12 lg:pb-20">
+            <p
+              className="font-heading font-bold text-[#f5f1ec] leading-none text-balance max-w-xl"
+              style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.03em' }}
+            >
+              Made to <span className="italic font-light">disappear.</span>
+            </p>
+          </div>
         </div>
       </section>
 
