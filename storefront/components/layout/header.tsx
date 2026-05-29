@@ -168,6 +168,14 @@ export default function Header() {
             </div>
             <nav className="p-4 space-y-1">
               <Link
+                href="/the-tuck-wallet"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block py-3 text-lg tracking-wide border-b border-border/50"
+                prefetch={true}
+              >
+                The Wallet
+              </Link>
+              <Link
                 href="/products"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="block py-3 text-lg tracking-wide border-b border-border/50"
