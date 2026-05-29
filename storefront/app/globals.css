@@ -4,16 +4,17 @@
 
 @layer base {
   :root {
-    --background: 0 0% 99%;
-    --foreground: 0 0% 5%;
-    --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 348 90% 55%;
-    --accent-foreground: 0 0% 100%;
-    --border: 0 0% 88%;
-    --ring: 348 90% 55%;
-    --primary: 0 0% 5%;
-    --primary-foreground: 0 0% 98%;
+    /* Tuck — warm editorial palette */
+    --background: 42 36% 87%;          /* #ede3cf — warm paper */
+    --foreground: 30 18% 4%;           /* #0a0806 — deep ink */
+    --muted: 42 32% 81%;               /* #d9ccb0 — paper dim */
+    --muted-foreground: 30 12% 32%;
+    --accent: 13 78% 45%;              /* #c93f1a — ember */
+    --accent-foreground: 42 36% 92%;
+    --border: 30 18% 4% / 0.15;
+    --ring: 13 78% 45%;
+    --primary: 30 18% 4%;
+    --primary-foreground: 42 36% 92%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
