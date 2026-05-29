@@ -81,9 +81,12 @@ export default function Header() {
             </button>
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <span className="font-heading text-2xl font-bold tracking-tight">
-                Tuck.
+            <Link href="/" className="flex items-baseline gap-1 group">
+              <span className="font-heading text-2xl font-bold tracking-[-0.04em]">
+                Tuck
+              </span>
+              <span className="font-heading text-2xl font-bold text-[#c93f1a] tracking-tight group-hover:text-foreground transition-colors">
+                .
               </span>
             </Link>
 
