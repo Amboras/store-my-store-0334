@@ -438,7 +438,7 @@ export default function HomePage() {
                     </button>
                   </div>
                   <p className="text-xs text-[#0f0f0f]/40">
-                    Unsubscribe any time. No spam — that\u2019s the whole point.
+                    Unsubscribe any time. No spam — that&rsquo;s the whole point.
                   </p>
                 </form>
               )}
