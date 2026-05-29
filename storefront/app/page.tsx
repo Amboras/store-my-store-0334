@@ -415,7 +415,7 @@ export default function HomePage() {
               {subscribed ? (
                 <div className="border-b-2 border-[#e85d3c] pb-5">
                   <p className="text-sm uppercase tracking-[0.25em] text-[#e85d3c] font-medium">
-                    You\u2019re in. Welcome to Tuck.
+                    You&rsquo;re in. Welcome to Tuck.
                   </p>
                 </div>
               ) : (
