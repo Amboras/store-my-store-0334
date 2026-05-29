@@ -82,17 +82,20 @@ export default function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
-              <span className="font-heading text-2xl font-semibold tracking-tight">
-                Store
+              <span className="font-heading text-2xl font-bold tracking-tight">
+                Tuck.
               </span>
             </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-8">
+              <Link href="/the-tuck-wallet" className="text-sm tracking-wide uppercase link-underline py-1" prefetch={true}>
+                The Wallet
+              </Link>
               <Link href="/products" className="text-sm tracking-wide uppercase link-underline py-1" prefetch={true}>
                 Shop All
               </Link>
-              {collections?.slice(0, 4).map((collection: any) => (
+              {collections?.slice(0, 3).map((collection: any) => (
                 <Link
                   key={collection.id}
                   href={`/collections/${collection.handle}`}
