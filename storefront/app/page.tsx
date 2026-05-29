@@ -252,7 +252,7 @@ export default function HomePage() {
                 style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.03em' }}
               >
                 Everything you need.<br />
-                <span className="italic font-light text-[#0f0f0f]/70">Nothing you don\u2019t.</span>
+                <span className="italic font-light text-[#0f0f0f]/70">Nothing you don&rsquo;t.</span>
               </h2>
             </div>
             <Link
