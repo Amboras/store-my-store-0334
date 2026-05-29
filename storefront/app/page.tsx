@@ -51,7 +51,7 @@ const REVIEWS = [
   },
   {
     quote:
-      'Carries exactly what I need and nothing I don\u2019t. The design is so clean it almost disappears.',
+      'Carries exactly what I need and nothing I don’t. The design is so clean it almost disappears.',
     name: 'Priya S.',
     detail: 'Tuck Card Holder · Sage Green',
   },
