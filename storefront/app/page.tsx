@@ -45,7 +45,7 @@ const COLLECTION_ITEMS = [
 const REVIEWS = [
   {
     quote:
-      'I forget it\u2019s there. Front pocket, all day, every day — finally a wallet that doesn\u2019t fight me.',
+      'I forget it’s there. Front pocket, all day, every day — finally a wallet that doesn’t fight me.',
     name: 'Marcus T.',
     detail: 'Tuck Wallet · Matte Black',
   },
