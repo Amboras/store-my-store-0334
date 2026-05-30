@@ -236,7 +236,6 @@ export default function TuckWalletPage() {
   const activeColor = COLORS[colorIdx]
   const activeBundle = BUNDLES.find((b) => b.id === bundle) ?? BUNDLES[0]
 
-  const galleryRef = useRef<HTMLDivElement>(null)
   const handleNextReview = () => setReviewIdx((i) => (i + 1) % REVIEWS.length)
   const handlePrevReview = () => setReviewIdx((i) => (i - 1 + REVIEWS.length) % REVIEWS.length)
 
