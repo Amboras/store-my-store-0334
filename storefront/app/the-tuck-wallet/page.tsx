@@ -19,11 +19,14 @@ import {
   Star,
   Truck,
   Calendar,
-  Instagram,
-  Twitter,
-  Facebook,
-  Youtube,
 } from 'lucide-react'
+
+const SOCIAL_ICONS = [
+  { name: 'Twitter', src: '/icons/simple-icons/twitter.svg' },
+  { name: 'Facebook', src: '/icons/simple-icons/facebook.svg' },
+  { name: 'Instagram', src: '/icons/simple-icons/instagram.svg' },
+  { name: 'YouTube', src: '/icons/simple-icons/youtube.svg' },
+]
 
 /* ──────────────────────────────────────────────
    The Tuck Wallet — clean, minimal, editorial PDP
