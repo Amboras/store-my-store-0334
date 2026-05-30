@@ -80,8 +80,10 @@ export default function RootLayout({
       <body>
         <Providers>
           <ElementPickerListener />
-          <AnnouncementBar />
-          <Header />
+          <ConditionalChrome>
+            <AnnouncementBar />
+            <Header />
+          </ConditionalChrome>
           <main className="min-h-screen">
             <ErrorBoundary>
               <AnalyticsProvider>
@@ -91,7 +93,9 @@ export default function RootLayout({
               </AnalyticsProvider>
             </ErrorBoundary>
           </main>
-          <Footer />
+          <ConditionalChrome>
+            <Footer />
+          </ConditionalChrome>
           <CookieConsent />
           <Toaster position="bottom-right" richColors />
         </Providers>
