@@ -416,7 +416,7 @@ export default function TuckWalletPage() {
             {/* Title */}
             <div className="space-y-3">
               <h1 className="font-heading text-4xl lg:text-5xl font-bold leading-[1.05] tracking-[-0.02em]">
-                The Tuck Wallet
+                The White Wallet
               </h1>
               <p className="text-sm text-gray-500 italic">{"Just enough."}</p>
             </div>
