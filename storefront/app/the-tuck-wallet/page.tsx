@@ -31,7 +31,6 @@ import {
    gold for star ratings, red badges for discounts only.
 ─────────────────────────────────────────────── */
 
-const INK = '#111111'
 const GOLD = '#f5b301'
 
 const WALLET_WHITE =
