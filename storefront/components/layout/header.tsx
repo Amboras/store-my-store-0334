@@ -2,28 +2,44 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { Search, ShoppingBag, User, Menu, X, LogIn } from 'lucide-react'
+import { Search, ShoppingBag, User, Menu, X, LogIn, ChevronDown } from 'lucide-react'
 import { useCart } from '@/hooks/use-cart'
 import { useAuth } from '@/hooks/use-auth'
 import CartDrawer from '@/components/cart/cart-drawer'
 import { useCollections } from '@/hooks/use-collections'
+
+type DropdownKey = 'shop' | 'collections' | 'pages' | 'features' | null
+
+const PAGES_LINKS = [
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Shipping', href: '/shipping' },
+]
+
+const FEATURES_LINKS = [
+  { label: 'The Tuck Wallet', href: '/the-tuck-wallet' },
+  { label: 'New Arrivals', href: '/products' },
+  { label: 'Best Sellers', href: '/products' },
+]
+
+const SHOP_LINKS = [
+  { label: 'All Products', href: '/products' },
+  { label: 'The Wallet', href: '/the-tuck-wallet' },
+  { label: 'Card Holders', href: '/products' },
+  { label: 'Money Clips', href: '/products' },
+]
 
 export default function Header() {
   const { itemCount } = useCart()
   const { isLoggedIn } = useAuth()
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState<DropdownKey>(null)
   const { data: collections } = useCollections()
 
   const mobileMenuRef = useRef<HTMLDivElement>(null)
   const mobileMenuCloseRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 10)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   // Focus close button when mobile menu opens
   useEffect(() => {
@@ -60,17 +76,29 @@ export default function Header() {
     }
   }, [])
 
+  const collectionsLinks =
+    collections && collections.length > 0
+      ? collections.slice(0, 6).map((c: { id: string; title: string; handle: string }) => ({
+          label: c.title,
+          href: `/collections/${c.handle}`,
+        }))
+      : [{ label: 'View all collections', href: '/collections' }]
+
+  const dropdownMap: Record<Exclude<DropdownKey, null>, { label: string; href: string }[]> = {
+    shop: SHOP_LINKS,
+    collections: collectionsLinks,
+    pages: PAGES_LINKS,
+    features: FEATURES_LINKS,
+  }
+
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-          isScrolled
-            ? 'bg-background/95 backdrop-blur-md border-b shadow-sm'
-            : 'bg-background border-b'
-        }`}
+        className="sticky top-0 z-40 w-full bg-[#0f0f0f] text-[#f4f1ea]"
+        onMouseLeave={() => setOpenDropdown(null)}
       >
-        <div className="container-custom">
-          <div className="flex h-16 items-center justify-between gap-4">
+        <div className="px-4 sm:px-8 lg:px-10">
+          <div className="relative flex h-16 lg:h-[68px] items-center justify-between gap-4">
             {/* Mobile menu toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
@@ -80,60 +108,96 @@ export default function Header() {
               <Menu className="h-5 w-5" />
             </button>
 
-            {/* Logo */}
-            <Link href="/" className="flex items-baseline gap-1 group">
-              <span className="font-heading text-2xl font-bold tracking-[-0.04em]">
+            {/* LEFT — Dropdown nav */}
+            <nav className="hidden lg:flex items-center gap-1">
+              {(['shop', 'collections', 'pages', 'features'] as const).map((key) => (
+                <div
+                  key={key}
+                  className="relative"
+                  onMouseEnter={() => setOpenDropdown(key)}
+                >
+                  <button
+                    className="flex items-center gap-1.5 px-3 py-2 text-[13px] tracking-wide capitalize hover:opacity-70 transition-opacity"
+                    aria-expanded={openDropdown === key}
+                  >
+                    {key}
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 transition-transform ${
+                        openDropdown === key ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                  {openDropdown === key && (
+                    <div className="absolute top-full left-0 pt-2 z-50">
+                      <div className="min-w-[200px] bg-[#0f0f0f] border border-white/10 py-2 shadow-xl">
+                        {dropdownMap[key].map((link) => (
+                          <Link
+                            key={link.href + link.label}
+                            href={link.href}
+                            className="block px-4 py-2 text-[13px] text-[#f4f1ea]/80 hover:text-[#f4f1ea] hover:bg-white/5 transition-colors"
+                            onClick={() => setOpenDropdown(null)}
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+
+            {/* CENTER — Logo */}
+            <Link
+              href="/"
+              className="absolute left-1/2 -translate-x-1/2 flex items-baseline gap-0.5 group"
+              prefetch={true}
+            >
+              <span className="font-heading italic text-2xl lg:text-3xl font-medium tracking-tight text-[#f4f1ea]">
                 Tuck
               </span>
-              <span className="font-heading text-2xl font-bold text-[#c93f1a] tracking-tight group-hover:text-foreground transition-colors">
+              <span className="font-heading italic text-2xl lg:text-3xl font-medium text-[#d4ff4d] tracking-tight">
                 .
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-8">
-              <Link href="/the-tuck-wallet" className="text-sm tracking-wide uppercase link-underline py-1" prefetch={true}>
-                The Wallet
-              </Link>
-              <Link href="/products" className="text-sm tracking-wide uppercase link-underline py-1" prefetch={true}>
-                Shop All
-              </Link>
-              {collections?.slice(0, 3).map((collection: any) => (
-                <Link
-                  key={collection.id}
-                  href={`/collections/${collection.handle}`}
-                  className="text-sm tracking-wide uppercase link-underline py-1"
-                  prefetch={true}
-                >
-                  {collection.title}
-                </Link>
-              ))}
-            </nav>
+            {/* RIGHT — Search + Icons */}
+            <div className="flex items-center gap-2 lg:gap-4">
+              {/* inline search input on desktop */}
+              <div className="hidden lg:flex items-center gap-3 px-4 py-2">
+                <span className="text-[13px] text-[#f4f1ea]/55">
+                  What are you looking for?
+                </span>
+              </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-1">
               <Link
                 href="/search"
-                className="p-2.5 hover:opacity-70 transition-opacity"
+                className="p-2 hover:opacity-70 transition-opacity"
                 aria-label="Search"
               >
-                <Search className="h-5 w-5" />
+                <Search className="h-[18px] w-[18px]" />
               </Link>
+
               <Link
                 href={isLoggedIn ? '/account' : '/auth/login'}
-                className="p-2.5 hover:opacity-70 transition-opacity hidden sm:block"
+                className="p-2 hover:opacity-70 transition-opacity hidden sm:block"
                 aria-label={isLoggedIn ? 'Account' : 'Sign in'}
               >
-                {isLoggedIn ? <User className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
+                {isLoggedIn ? (
+                  <User className="h-[18px] w-[18px]" />
+                ) : (
+                  <LogIn className="h-[18px] w-[18px]" />
+                )}
               </Link>
+
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="relative p-2.5 hover:opacity-70 transition-opacity"
+                className="relative p-2 hover:opacity-70 transition-opacity"
                 aria-label="Shopping bag"
               >
-                <ShoppingBag className="h-5 w-5" />
+                <ShoppingBag className="h-[18px] w-[18px]" />
                 {itemCount > 0 && (
-                  <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-foreground text-[10px] font-bold text-background">
+                  <span className="absolute -top-0.5 -right-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#d4ff4d] text-[10px] font-bold text-[#0f0f0f] px-1">
                     {itemCount}
                   </span>
                 )}
@@ -147,7 +211,7 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-black/40"
+            className="absolute inset-0 bg-black/60"
             onClick={() => setIsMobileMenuOpen(false)}
           />
           <div
@@ -156,10 +220,10 @@ export default function Header() {
             aria-modal="true"
             aria-label="Navigation menu"
             onKeyDown={handleMobileMenuKeyDown}
-            className="absolute inset-y-0 left-0 w-80 max-w-[85vw] bg-background animate-slide-in-right"
+            className="absolute inset-y-0 left-0 w-80 max-w-[85vw] bg-[#0f0f0f] text-[#f4f1ea] animate-slide-in-right"
           >
-            <div className="flex items-center justify-between p-4 border-b">
-              <span className="font-heading text-xl font-semibold">Menu</span>
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <span className="font-heading italic text-xl">Menu</span>
               <button
                 ref={mobileMenuCloseRef}
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -173,7 +237,7 @@ export default function Header() {
               <Link
                 href="/the-tuck-wallet"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-3 text-lg tracking-wide border-b border-border/50"
+                className="block py-3 text-lg tracking-wide border-b border-white/10"
                 prefetch={true}
               >
                 The Wallet
@@ -181,34 +245,44 @@ export default function Header() {
               <Link
                 href="/products"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-3 text-lg tracking-wide border-b border-border/50"
+                className="block py-3 text-lg tracking-wide border-b border-white/10"
                 prefetch={true}
               >
                 Shop All
               </Link>
-              {collections?.map((collection: any) => (
+              {collections?.map((collection: { id: string; title: string; handle: string }) => (
                 <Link
                   key={collection.id}
                   href={`/collections/${collection.handle}`}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-3 text-lg tracking-wide border-b border-border/50"
+                  className="block py-3 text-lg tracking-wide border-b border-white/10"
                   prefetch={true}
                 >
                   {collection.title}
+                </Link>
+              ))}
+              {PAGES_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-3 text-lg tracking-wide border-b border-white/10"
+                >
+                  {link.label}
                 </Link>
               ))}
               <div className="pt-4 space-y-1">
                 <Link
                   href={isLoggedIn ? '/account' : '/auth/login'}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-3 text-muted-foreground"
+                  className="block py-3 text-[#f4f1ea]/70"
                 >
                   {isLoggedIn ? 'Account' : 'Sign In'}
                 </Link>
                 <Link
                   href="/search"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-3 text-muted-foreground"
+                  className="block py-3 text-[#f4f1ea]/70"
                 >
                   Search
                 </Link>
