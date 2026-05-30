@@ -359,7 +359,7 @@ export default function TuckWalletPage() {
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-14">
 
           {/* LEFT — Gallery */}
-          <div ref={galleryRef}>
+          <div>
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-gray-50">
               <Image
                 key={activeColor.name}
