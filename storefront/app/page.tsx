@@ -164,49 +164,66 @@ export default function HomePage() {
   return (
     <div className="bg-white text-[#0f0f0f]">
       {/* ════════════════════════════════════════════
-          HERO — full-bleed split image with centered serif headline
+          HERO — full-bleed split image, editorial centered headline
       ════════════════════════════════════════════ */}
       <section className="relative w-full">
-        <div className="relative grid grid-cols-2 w-full h-[calc(100vh-68px)] min-h-[560px] max-h-[820px] overflow-hidden">
+        <div className="relative w-full h-screen min-h-[640px] overflow-hidden bg-[#0f0f0f]">
+          {/* Split image slides — both halves bleed to the edges */}
           {HERO_SLIDES.map((s, i) => (
             <div
               key={i}
-              className={`absolute inset-0 grid grid-cols-2 transition-opacity duration-700 ${
+              className={`absolute inset-0 grid grid-cols-2 transition-opacity duration-[900ms] ease-out ${
                 i === slide ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
               aria-hidden={i !== slide}
             >
-              <div className="relative bg-[#e8dfc9]">
+              <div className="relative bg-[#e8dfc9] overflow-hidden">
                 <Image
                   src={s.leftImage}
                   alt=""
                   fill
                   priority={i === 0}
                   sizes="50vw"
-                  className="object-cover"
+                  className={`object-cover transition-transform duration-[8000ms] ease-out ${
+                    i === slide ? 'scale-105' : 'scale-100'
+                  }`}
                 />
               </div>
-              <div className="relative bg-[#1f2a1c]">
+              <div className="relative bg-[#1f2a1c] overflow-hidden">
                 <Image
                   src={s.rightImage}
                   alt=""
                   fill
                   priority={i === 0}
                   sizes="50vw"
-                  className="object-cover"
+                  className={`object-cover transition-transform duration-[8000ms] ease-out ${
+                    i === slide ? 'scale-105' : 'scale-100'
+                  }`}
                 />
               </div>
             </div>
           ))}
 
-          {/* Centered serif headline + eyebrow + CTA — sits over the split */}
+          {/* Subtle dark gradient — only across the center band where text sits */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 18%, rgba(0,0,0,0.32) 42%, rgba(0,0,0,0.32) 62%, rgba(0,0,0,0) 88%, rgba(0,0,0,0) 100%)',
+            }}
+          />
+          {/* Soft vignette at the very bottom for slide controls */}
+          <div className="absolute inset-x-0 bottom-0 h-32 pointer-events-none bg-gradient-to-t from-black/35 to-transparent" />
+
+          {/* Centered editorial copy block */}
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center text-white">
-            <p className="text-[11px] uppercase tracking-[0.4em] mb-7 opacity-90 drop-shadow-md">
-              {current.eyebrow}
+            <p className="text-[11px] sm:text-[12px] uppercase tracking-[0.42em] mb-8 opacity-95">
+              Tuck · {current.eyebrow}
             </p>
+
             <h1
-              className="font-heading font-medium leading-[0.95] tracking-[-0.02em] drop-shadow-[0_2px_18px_rgba(0,0,0,0.35)] text-balance max-w-[14ch]"
-              style={{ fontSize: 'clamp(2.75rem, 7vw, 6.5rem)' }}
+              className="font-heading font-normal leading-[0.95] tracking-[-0.015em] text-balance max-w-[15ch]"
+              style={{ fontSize: 'clamp(3rem, 7.5vw, 7rem)' }}
             >
               {current.headline.lead}
               <span className="italic font-light">{current.headline.italic}</span>
@@ -214,41 +231,42 @@ export default function HomePage() {
 
             <Link
               href={current.href}
-              className="group mt-12 inline-flex items-center gap-3 bg-[#eaffb4] text-[#0f0f0f] pl-7 pr-2 py-2 rounded-full text-sm tracking-wide hover:bg-white transition-colors"
+              className="group mt-12 inline-flex items-center gap-2.5 bg-[#f6f3ec] text-[#0f0f0f] pl-7 pr-6 py-3.5 rounded-full text-[13px] tracking-wide font-medium hover:bg-white transition-colors"
             >
               {current.cta}
-              <span className="w-9 h-9 rounded-full bg-[#0f0f0f] text-[#eaffb4] flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
-                <ArrowRight className="h-4 w-4" />
-              </span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
 
-          {/* Slide counter + arrows — bottom center */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-6 text-white">
-            <span className="text-xs tracking-wider tabular-nums">
-              {String(slide + 1).padStart(1, '0')}/{slides}
+          {/* Left arrow — vertically centered on left edge */}
+          <button
+            onClick={prev}
+            aria-label="Previous slide"
+            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full flex items-center justify-center text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+
+          {/* Right arrow — vertically centered on right edge */}
+          <button
+            onClick={next}
+            aria-label="Next slide"
+            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full flex items-center justify-center text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+
+          {/* Slide counter + progress bar — bottom center */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4 text-white">
+            <span className="text-[11px] tracking-[0.2em] tabular-nums opacity-90">
+              {String(slide + 1).padStart(2, '0')} / {String(slides).padStart(2, '0')}
             </span>
-            <div className="w-24 h-px bg-white/40 relative">
+            <div className="w-32 sm:w-40 h-px bg-white/30 relative overflow-hidden">
               <span
-                className="absolute left-0 top-0 h-px bg-white transition-all duration-500"
+                key={slide}
+                className="absolute left-0 top-0 h-px bg-white transition-all duration-700 ease-out"
                 style={{ width: `${((slide + 1) / slides) * 100}%` }}
               />
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={prev}
-                aria-label="Previous slide"
-                className="p-1.5 hover:opacity-70 transition-opacity"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              <button
-                onClick={next}
-                aria-label="Next slide"
-                className="p-1.5 hover:opacity-70 transition-opacity"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
             </div>
           </div>
         </div>
