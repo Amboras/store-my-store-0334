@@ -790,13 +790,15 @@ export default function TuckWalletPage() {
                 more than you need.
               </p>
               <div className="flex items-center gap-3 pt-1">
-                {[Twitter, Facebook, Instagram, Youtube].map((Icon, i) => (
+                {SOCIAL_ICONS.map((s) => (
                   <Link
-                    key={i}
+                    key={s.name}
                     href="#"
+                    aria-label={s.name}
                     className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 hover:border-black/40 transition-colors"
                   >
-                    <Icon className="h-3.5 w-3.5" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={s.src} alt={s.name} className="h-3.5 w-3.5 opacity-80" />
                   </Link>
                 ))}
               </div>
